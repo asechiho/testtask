@@ -1,0 +1,11 @@
+name: chrome
+args:
+  - start-maximized
+  - no-sandbox
+capabilities:
+options:
+  intl.accept_languages: en
+  safebrowsing.enabled: true
+  profile.default_content_settings.popups: 0
+  disable-popup-blocking: true
+  download.prompt_for_download: false
