@@ -2,10 +2,12 @@ package io.testtask.base;
 
 import io.testtask.annotations.PageInfo;
 import io.testtask.elements.ElementHandler;
+import io.testtask.utils.ConditionWait;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.time.Duration;
 import java.util.NoSuchElementException;
@@ -38,6 +40,7 @@ public abstract class BasePage {
     }
 
     public boolean isPagePresent(Duration timeout) {
+        ConditionWait.waitForTrue(driver -> (boolean) ((RemoteWebDriver) driver).executeScript("return document.readyState == 'complete'"));
         return new ElementHandler(locator, pageName).isPresent(timeout);
     }
 

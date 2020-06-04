@@ -3,7 +3,8 @@
 <suite name="Test Suite" configfailurepolicy="continue">
     <test name="Navigation Bar Test">
         <classes>
-            <class name="io.testtask.tests.NavBarTest"/>
+            <class name="io.testtask.tests.first.NavBarTest"/>
+            <class name="io.testtask.tests.first.PackageInfoTest"/>
         </classes>
     </test>
 </suite>

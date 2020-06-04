@@ -13,4 +13,12 @@ public class HomePage extends BasePage {
     public ElementHandler getNavigationButton(String buttonName) {
         return new ElementHandler(By.xpath(format("//*[contains(@class, 'Header-menu')]/*[text() = '%s']", buttonName)), "Navigation button: " + buttonName);
     }
+
+    public ElementHandler getSearchInput() {
+        return new ElementHandler(By.cssSelector("form[role=search] > input"), "Search for a package input");
+    }
+
+    public ElementHandler getSearchButton() {
+        return new ElementHandler(By.cssSelector("form[role=search] > button"), "Search button");
+    }
 }

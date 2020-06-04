@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @AllArgsConstructor
 @ToString(of = {"name"})
@@ -32,9 +33,21 @@ class ChromeProfile {
 
     ChromeOptions chromeOptions() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments(getArgs());
+        executeIfValueNotNull(getArgs(), options::addArguments);
+        executeIfValueNotNull(getCapabilities(), caps -> caps.forEach(options::setCapability));
         options.setCapability(ChromeOptions.CAPABILITY, getOptions());
-        getCapabilities().forEach(options::setCapability);
         return options;
+    }
+
+    private <T> void executeIfValueNotNull(List<T> value, Consumer<List<T>> lambda) {
+        if (value != null) {
+            lambda.accept(value);
+        }
+    }
+
+    private <T> void executeIfValueNotNull(Map<String, Object> value, Consumer<Map<String, Object>> lambda) {
+        if (value != null) {
+            lambda.accept(value);
+        }
     }
 }
