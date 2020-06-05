@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.FluentWait;
 import java.time.Duration;
 import java.util.function.Function;
 
+import static io.testtask.configuration.SeleniumConfig.seleniumConfig;
+
 @Slf4j
 public class ConditionWait {
     private static Waiter getWaiter(Duration conditionDuration, Duration pollingDuration) {
@@ -20,6 +22,10 @@ public class ConditionWait {
 
     public static void waitForTrue(Duration timeOut, Duration polling, Function<WebDriver, Boolean> condition) {
         until(timeOut, polling, condition);
+    }
+
+    public static void waitForTrue(Function<WebDriver, Boolean> condition) {
+        until(Duration.ofMillis(seleniumConfig().conditionTimeoutMills()), Duration.ofMillis(seleniumConfig().pollingTimeoutMills()), condition);
     }
 
     private static <T> T until(Duration timeOut, Duration polling, Function<WebDriver, T> condition) {

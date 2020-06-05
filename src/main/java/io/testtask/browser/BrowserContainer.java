@@ -24,6 +24,10 @@ public abstract class BrowserContainer {
         throw new IllegalStateException(logBrowserHasNotStarted());
     }
 
+    public static void setWebDriver(WebDriver webDriver) {
+        WEB_DRIVER_CONTAINER.set(webDriver);
+    }
+
     public static void open(String url) {
         synchronized (BrowserContainer.class) {
             WebDriver webDriver = Browsers.getFactory().getWebDriver();
