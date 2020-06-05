@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntArray {
 
-    public static void concatArraysFromFilesAndSortDistinctValuesToConsole(String firstFileName, String secondFileName) {
+    public static void concatArraysFromFilesAndSortDistinctValuesToConsole(String firstFileName, String secondFileName) throws IOException, NullPointerException {
         concatArraysAndSortDistinctValuesToConsole(
                 uploadArrayFromFile(firstFileName, " "),
                 uploadArrayFromFile(secondFileName, " ")
@@ -26,26 +26,28 @@ public class IntArray {
     }
 
     public static void concatArraysAndSortDistinctValuesToConsole(int[] firstArrays, int[] secondArrays) {
-        int[] result = IntStream.concat(IntStream.of(firstArrays), IntStream.of(secondArrays))
+        int[] result = IntStream.concat(IntStream.of(checkAndGetArray(firstArrays)), IntStream.of(checkAndGetArray(secondArrays)))
                 .sorted()
                 .distinct()
                 .toArray();
         System.out.print(Arrays.stream(result).mapToObj(String::valueOf).collect(Collectors.joining(" ")));
     }
 
-    public static int[] uploadArrayFromFile(String fileName, String delimiter) {
-        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName)) {
-            String line = StringUtils.normalizeSpace(IOUtils.toString(Objects.requireNonNull(stream), StandardCharsets.UTF_8));
-            String[] splitLine = line.split(delimiter);
-            return Arrays.stream(splitLine)
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
-        } catch (IOException e) {
-            log.error(e.getMessage(), e.getCause());
-            return new int[]{};
-        } catch (NullPointerException e) {
-            log.error("File Not Found: " + fileName, e.getCause());
+    public static int[] uploadArrayFromFile(String fileName, String delimiter) throws IOException, NullPointerException {
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        String line = StringUtils.normalizeSpace(IOUtils.toString(Objects.requireNonNull(stream), StandardCharsets.UTF_8));
+        String[] splitLine = line.split(delimiter);
+        return Arrays.stream(splitLine)
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+    }
+
+    private static int[] checkAndGetArray(int[] array) {
+        if (array == null) {
+            log.warn("Array was nullable");
             return new int[]{};
         }
+        return array;
     }
 }
